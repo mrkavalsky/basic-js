@@ -67,7 +67,7 @@ class VigenereCipheringMachine {
     arrKey = key.split('');
 
     for(let i = 0; i < arrStr.length; i++) {
-      let m = alpha.indexOf( arrStr [i] );
+      let m = alpha.indexOf( arrStr[i] );
       let n = alpha.indexOf( arrKey[i] );
       res.push( table[m][n] );
     };
@@ -93,6 +93,54 @@ class VigenereCipheringMachine {
     
     if(str === undefined || key === undefined) throw new Error();
 
+    let res = [];
+    let arrStr = [];
+    let arrKey = [];
+    let finishRes = [];
+
+    str = str.toUpperCase();
+    key = key.toUpperCase();
+
+    let num = 1;
+
+    for(let i = 0; i < str.length; i++) {
+      if( str.codePointAt(i) >= 65 && str.codePointAt(i) <= 90 ) {
+        arrStr.push(str[i]);
+      };
+    };
+
+    if(arrStr.length > key.length) {
+      num = arrStr.length / key.length;
+      num = Math.ceil(num);
+      key = key.repeat(num);
+      key = key.slice(0, arrStr.length);
+    };
+    if(arrStr.length < key.length) {
+      key = key.slice(0, arrStr.length);
+    };
+
+    arrKey = key.split('');
+
+    for(let i = 0; i < arrStr.length; i++) {
+      let n = alpha.indexOf( arrKey[i] );
+      let m = table[n].indexOf( arrStr[i] );
+      res.push( alpha[m] );
+    };
+
+    let j = 0;
+
+    for(let i = 0; i < str.length; i++) {
+      if( str.codePointAt(i) >= 65 && str.codePointAt(i) <= 90 ) {
+        finishRes.push(res[j]);
+        j++;
+      } else finishRes.push(str[i]);
+    };
+
+    if( this.mod === false ) {  
+      finishRes.reverse();
+    }
+
+    return finishRes.join('');
   }
 }
 
